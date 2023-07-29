@@ -1,0 +1,19 @@
+server:
+  port: 9000
+
+
+logging:
+  level:
+    web: trace
+
+key: demo:1690612995123:7c4b8ebe0300000000cf2645098a7fd521d6454cbcf8ace6108b6ab6db
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/document_digitization
+    username: root
+    password: Hoangdao192@
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
