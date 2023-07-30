@@ -1,20 +1,23 @@
 package com.viettel.documentdigitization.parser;
 
 import com.aspose.words.*;
-import com.viettel.documentdigitization.parser.document.*;
 import com.viettel.documentdigitization.parser.document.Document;
 import com.viettel.documentdigitization.parser.document.Paragraph;
 import com.viettel.documentdigitization.parser.document.Table;
+import com.viettel.documentdigitization.parser.document.*;
+import com.viettel.documentdigitization.util.FileHelper;
 import com.viettel.documentdigitization.util.ListHelper;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStream;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-public class WordDocumentParser {
+public class WordDocumentParser extends DocumentParser {
 
-    private Map<Node, Item> parsedNodeMap = new HashMap<>();
+    public WordDocumentParser(String storagePath) {
+        super(storagePath);
+    }
 
     public void getPageCount() throws Exception {
         int sectionIndex = 2;
@@ -29,6 +32,33 @@ public class WordDocumentParser {
         tempDoc.appendChild(targetSection);
 
         System.out.println(tempDoc.getPageCount());
+    }
+
+    @Override
+    public Document parse(File sourceFile) throws Exception {
+        FileInputStream fileInputStream = new FileInputStream(sourceFile);
+        String extention = sourceFile.getName().split("\\.")[sourceFile.getName().split("\\.").length - 1]
+                .toLowerCase();
+        if (!(extention.equals("doc") || extention.equals("docx"))) {
+            throw new RuntimeException("Wrong file type, require doc or docx but receive " + extention);
+        }
+        return parse(fileInputStream, extention);
+    }
+
+    public Document parse(InputStream inputStream, String wordFileType) throws Exception {
+        Document parsedDocument = parse(inputStream);
+        File file = new File(storagePath, parsedDocument.getUuid().toString());
+        if (!file.exists() || !file.isDirectory()) {
+            boolean success = file.mkdirs();
+        }
+        File sourceFile = new File(
+                file.getAbsolutePath(),
+                "source-" + parsedDocument.getUuid().toString()
+                + "."
+                + wordFileType
+        );
+        FileHelper.save(inputStream, sourceFile);
+        return parsedDocument;
     }
 
     public Document parse(InputStream inputStream) throws Exception {
@@ -93,16 +123,26 @@ public class WordDocumentParser {
         return parsedItem;
     }
 
-    private Paragraph parseParagraph(com.aspose.words.Paragraph paragraph) {
-        System.out.println(paragraph.getFrameFormat().getHeight());
-//        paragraph.getParagraphFormat().
+    private String cleanTrashCharacter(String text) {
+        text = text.replace("\r", "");
+        text = text.replace("\t", "");
+        text = text.replace("\f", "");
+        text = text.replace("\u000B", "");
+//        return text.replaceAll("\\r\\f", "");
+        return text;
+    }
 
+    private Paragraph parseParagraph(com.aspose.words.Paragraph paragraph) {
         Paragraph parsedParagraph = new Paragraph();
         String text = paragraph.getText();
+        text = cleanTrashCharacter(text);
+        if (text.trim().length() == 0) {
+            return null;
+        }
         String[] sentences = text.split("\\.");
         for (String sentence : sentences) {
             parsedParagraph.addChild(
-                    new Sentence(sentence)
+                    new Sentence(sentence + ".")
             );
         }
         return parsedParagraph;

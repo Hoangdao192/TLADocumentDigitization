@@ -27,6 +27,9 @@ public class WordDocumentParserPOI {
         Document parsedDocument = new Document();
 
         XWPFDocument wordDocument = new XWPFDocument(inputStream);
+//        wordDocument.createFooter(
+//                org.apache.poi.wp.usermodel.HeaderFooterType.
+//        )
         CTDocument1 ctDocument1 = wordDocument.getDocument();
         CTBody ctBody = ctDocument1.getBody();
         CTSectPr ctSectPr = ctBody.getSectPr();
@@ -66,16 +69,9 @@ public class WordDocumentParserPOI {
         else if (bodyElement instanceof XWPFTable) {
             parsedItem = parseTable((XWPFTable) bodyElement);
         }
-        else if (bodyElement instanceof XWPFTableRow) {
-            parsedItem = parseRow((XWPFTableRow) bodyElement);
-        }
-        else if (bodyElement instanceof XWPFTableCell) {
-            parsedItem = parseCell((XWPFTableCell) bodyElement);
-        }
 
         if (parent != null && parsedItem != null) {
             parent.addChild(parsedItem);
-//            bodyElement.getBody().getBodyElements()
             if (bodyElement.getBody() != bodyElement.getPart()) {
                 for (IBodyElement child : bodyElement.getBody().getBodyElements()) {
                     traverse(child, (ContainerItem) parsedItem, page, depth + 1);
@@ -115,32 +111,28 @@ public class WordDocumentParserPOI {
 
     private Table parseTable(XWPFTable table) {
         Table parsedTable = new Table();
-//        List<Row> rows = ListHelper.toList(table.getRows());
-//        for (Row row : rows) {
-//            parsedTable.addChild(parseRow(row));
-//        }
-//        parsedNodeMap.put(table, parsedTable);
+        List<XWPFTableRow> rows = table.getRows();
+        for (XWPFTableRow row : rows) {
+            parsedTable.addChild(parseRow(row));
+        }
         return parsedTable;
     }
 
     private Table.Row parseRow(XWPFTableRow row) {
         Table.Row parsedRow = new Table.Row();
-//        row.
-//        List<Cell> cells = ListHelper.toList(row.getCells());
-//        for (Cell cell : cells) {
-//            parsedRow.addChild(parseCell(cell));
-//        }
-//        parsedNodeMap.put(row, parsedRow);
+        List<XWPFTableCell> cells = row.getTableCells();
+        for (XWPFTableCell cell : cells) {
+            parsedRow.addChild(parseCell(cell));
+        }
         return parsedRow;
     }
 
     private Table.Cell parseCell(XWPFTableCell cell) {
         Table.Cell parsedCell = new Table.Cell();
-//        List<com.aspose.words.Paragraph> paragraphs = ListHelper.toList(cell.getParagraphs());
-//        for (com.aspose.words.Paragraph paragraph : paragraphs) {
-//            parsedCell.addChild(parseParagraph(paragraph));
-//        }
-//        parsedNodeMap.put(cell, parsedCell);
+        List<XWPFParagraph> paragraphs = cell.getParagraphs();
+        for (XWPFParagraph paragraph : paragraphs) {
+            parsedCell.addChild(parseParagraph(paragraph));
+        }
         return parsedCell;
     }
 

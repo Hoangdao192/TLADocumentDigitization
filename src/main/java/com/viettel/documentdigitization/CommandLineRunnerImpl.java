@@ -11,6 +11,7 @@ import jep.JepConfig;
 import jep.MainInterpreter;
 import jep.SharedInterpreter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -26,6 +27,9 @@ public class CommandLineRunnerImpl implements CommandLineRunner {
     private StringParser stringParser;
     @Autowired
     private PythonExecuteService pythonExecuteService;
+
+    @Value("${parser.storage.path}")
+    private String storagePath;
 
     @Override
     public void run(String... args) throws Exception {
@@ -45,11 +49,13 @@ public class CommandLineRunnerImpl implements CommandLineRunner {
         testPdfDocumentParser();
     }
 
-    public void testPdfDocumentParser() {
-        PdfDocumentParser pdfDocumentParser = new PdfDocumentParser(pythonExecuteService);
-        pdfDocumentParser.parse(
+    public void testPdfDocumentParser() throws Exception {
+        PdfDocumentParser pdfDocumentParser = new PdfDocumentParser(pythonExecuteService, storagePath
+                );
+        Document document = pdfDocumentParser.parse(
                 new File("/home/hoangdao/Workspace/Java/TLADocumentDigitization/src/main/resources/VanBanGoc_92.2015.QH13.P1.pdf")
         );
+        System.out.println(document);
     }
 
     public void testEmbeddedPython() {

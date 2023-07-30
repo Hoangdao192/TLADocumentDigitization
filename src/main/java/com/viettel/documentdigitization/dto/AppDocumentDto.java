@@ -1,26 +1,16 @@
-package com.viettel.documentdigitization.entity;
+package com.viettel.documentdigitization.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
-import javax.persistence.*;
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.List;
 
-@Entity
-@Table(name = "documents")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
-public class AppDocument {
+public class AppDocumentDto {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String sourceFilePath;
     private String sourceFileExtension;
