@@ -1,7 +1,6 @@
 package com.viettel.documentdigitization.controller;
 
-import com.viettel.documentdigitization.dto.BaseResponse;
-import com.viettel.documentdigitization.parser.index.IndexedDocument;
+import com.viettel.documentdigitization.parser.document.Document;
 import com.viettel.documentdigitization.service.IndexingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +15,7 @@ public class IndexingController {
 
     @ResponseBody
     @PostMapping("file")
-    public BaseResponse<IndexedDocument> indexFile(@RequestParam MultipartFile file) {
+    public Document indexFile(@RequestParam MultipartFile file) throws Exception {
         return indexingService.indexFile(file);
     }
 

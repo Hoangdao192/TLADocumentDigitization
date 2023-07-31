@@ -12,13 +12,16 @@ parser:
   storage:
     path: /home/hoangdao/.tla_document_digitization
 
+python:
+  version: "3.10"
+  path: /home/hoangdao/Workspace/Java/TLADocumentDigitization/python
 
 spring:
-  datasource:
-    url: jdbc:mysql://localhost:3306/document_digitization
-    username: root
-    password: Hoangdao192@
-    driver-class-name: com.mysql.cj.jdbc.Driver
+#  datasource:
+#    url: jdbc:mysql://localhost:3306/document_digitization
+#    username: root
+#    password: Hoangdao192@
+#    driver-class-name: com.mysql.cj.jdbc.Driver
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher

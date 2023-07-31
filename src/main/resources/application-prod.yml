@@ -1,0 +1,25 @@
+server:
+  port: 9000
+
+python:
+  version: "3.10"
+  path: /app/embedded/python
+  lib:  /usr/local/lib/python3.9/dist-packages/
+
+logging:
+  level:
+    web: trace
+
+parser:
+  storage:
+    path: /app/data
+
+
+spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  servlet:
+    multipart:
+      max-file-size: 1GB
+      max-request-size: 1GB

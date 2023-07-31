@@ -25,7 +25,6 @@ public class CommandLineRunnerImpl implements CommandLineRunner {
     private PdfParsingService pdfParsingService;
     @Autowired
     private StringParser stringParser;
-    @Autowired
     private PythonExecuteService pythonExecuteService;
 
     @Value("${parser.storage.path}")
@@ -46,7 +45,7 @@ public class CommandLineRunnerImpl implements CommandLineRunner {
 //        new PdfDocumentParser().parse();
 
 //        testEmbeddedPython();
-        testPdfDocumentParser();
+//        testPdfDocumentParser();
     }
 
     public void testPdfDocumentParser() throws Exception {

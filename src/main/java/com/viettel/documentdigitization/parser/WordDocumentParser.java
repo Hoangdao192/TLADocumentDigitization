@@ -54,8 +54,8 @@ public class WordDocumentParser extends DocumentParser {
         File sourceFile = new File(
                 file.getAbsolutePath(),
                 "source-" + parsedDocument.getUuid().toString()
-                + "."
-                + wordFileType
+                        + "."
+                        + wordFileType
         );
         FileHelper.save(inputStream, sourceFile);
         return parsedDocument;
@@ -81,41 +81,37 @@ public class WordDocumentParser extends DocumentParser {
         Item parsedItem = null;
         if (node instanceof com.aspose.words.Document) {
             parsedItem = new Document();
-        }
-        else if (node instanceof com.aspose.words.Paragraph) {
+        } else if (node instanceof com.aspose.words.Paragraph) {
             parsedItem = parseParagraph((com.aspose.words.Paragraph) node);
-        }
-        else if (node instanceof com.aspose.words.Table) {
+        } else if (node instanceof com.aspose.words.Table) {
             parsedItem = parseTable((com.aspose.words.Table) node);
-        }
-        else if (node instanceof Row) {
+        } else if (node instanceof Row) {
             parsedItem = parseRow((Row) node);
-        }
-        else if (node instanceof Cell) {
+        } else if (node instanceof Cell) {
             parsedItem = parseCell((Cell) node);
         }
 
+
         if (parent != null && parsedItem != null) {
             parent.addChild(parsedItem);
-            if (node.isComposite()) {
+            if (node.isComposite() && !(node instanceof com.aspose.words.Paragraph)) {
                 List<Node> children = ListHelper.toList(((CompositeNode) node).getChildNodes());
                 for (Node child : children) {
                     traverse(child, (ContainerItem) parsedItem, page, depth + 1);
                 }
             }
-        }
-        else if (parent == null && parsedItem != null && node.isComposite()) {
+        } else if (parent == null && parsedItem != null && node.isComposite() && !(node instanceof com.aspose.words.Paragraph)) {
             List<Node> children = ListHelper.toList(((CompositeNode) node).getChildNodes());
             for (Node child : children) {
                 traverse(child, (ContainerItem) parsedItem, page, depth + 1);
             }
-        }
-        else if (parsedItem == null && parent != null && node.isComposite()) {
+        } else if (parsedItem == null && parent != null && node.isComposite() && !(node instanceof com.aspose.words.Paragraph)) {
             List<Node> children = ListHelper.toList(((CompositeNode) node).getChildNodes());
             for (Node child : children) {
                 traverse(child, parent, page, depth + 1);
             }
         }
+
 
         if (parsedItem != null) {
             parsedItem.setPage(page);
