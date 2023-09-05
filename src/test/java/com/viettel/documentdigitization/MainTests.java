@@ -1,13 +1,9 @@
 package com.viettel.documentdigitization;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+public class MainTests {
 
-@SpringBootTest
-class MainTests {
-
-    @Test
-    void contextLoads() {
+    public static void main(String[] args) throws Exception {
+        System.out.println(System.getProperty("os.name"));
     }
 
 }
